@@ -5,17 +5,21 @@
  *      Author: ARM
  */
 
+__flash_size__ = 512K
+__flash_page_size__ = 2K
+
 MEMORY
 {
-    /* Last FLASH page is reserved for EEPROM emulation (512K-2K = 510K) */
-    FLASH   (rx)  : ORIGIN = 0x08000000, LENGTH = 510K
+    /* Last FLASH page is reserved for EEPROM emulation */
+    FLASH   (rx)  : ORIGIN = 0x08000000, LENGTH = (__flash_size__ - __flash_page_size__)
+    EEPROM  (rw)  : ORIGIN = (ORIGIN(FLASH) + LENGTH(FLASH), LENGTH = __flash_page_size__
     CCMSRAM (rwx) : ORIGIN = 0x10000000, LENGTH = 32K
     SRAM1   (rwx) : ORIGIN = 0x20000000, LENGTH = 80K
     SRAM2   (rwx) : ORIGIN = 0x20014000, LENGTH = 16K
 }
 
 __flash_address__ = ORIGIN(FLASH);
-__eeprom_page_address__ = ORIGIN(FLASH) + LENGTH(FLASH);
+__eeprom_page_address__ = ORIGIN(EEPROM);
 
 ENTRY(Reset_Handler)
 
