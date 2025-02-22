@@ -5,14 +5,14 @@
  *      Author: ARM
  */
 
-__flash_size__ = 512K
-__flash_page_size__ = 2K
+__flash_size__ = 512K;
+__flash_page_size__ = 2K;
 
 MEMORY
 {
     /* Last FLASH page is reserved for EEPROM emulation */
     FLASH   (rx)  : ORIGIN = 0x08000000, LENGTH = (__flash_size__ - __flash_page_size__)
-    EEPROM  (rw)  : ORIGIN = (ORIGIN(FLASH) + LENGTH(FLASH), LENGTH = __flash_page_size__
+    EEPROM  (rw)  : ORIGIN = (ORIGIN(FLASH) + LENGTH(FLASH)), LENGTH = __flash_page_size__
     CCMSRAM (rwx) : ORIGIN = 0x10000000, LENGTH = 32K
     SRAM1   (rwx) : ORIGIN = 0x20000000, LENGTH = 80K
     SRAM2   (rwx) : ORIGIN = 0x20014000, LENGTH = 16K
@@ -53,14 +53,14 @@ SECTIONS
         . = ALIGN(4);
         __copy_table_start__ = .;
         LONG(LOADADDR(.data_sram1));
-        LONG(    ADDR(.data_sram1));
-        LONG(  SIZEOF(.data_sram1) / 4);
+        LONG(__data_sram1_start__);
+        LONG(__data_sram1_end__ - __data_sram1_start__);
         LONG(LOADADDR(.data_sram2));
-        LONG(    ADDR(.data_sram2));
-        LONG(  SIZEOF(.data_sram2) / 4);
+        LONG(__data_sram2_start__);
+        LONG(__data_sram2_end__ - __data_sram2_start__);
         LONG(LOADADDR(.data_ccmsram));
-        LONG(    ADDR(.data_ccmsram));
-        LONG(  SIZEOF(.data_ccmsram) / 4);
+        LONG(__data_ccmsram_start__);
+        LONG(__data_ccmsram_end__ - __data_ccmsram_start__);
         __copy_table_end__ = .;
     } > FLASH
 
@@ -68,12 +68,12 @@ SECTIONS
     {
         . = ALIGN(4);
         __zero_table_start__ = .;
-        LONG(    ADDR(.bss_sram1));
-        LONG(  SIZEOF(.bss_sram1) / 4);
-        LONG(    ADDR(.bss_sram2));
-        LONG(  SIZEOF(.bss_sram2) / 4);
-        LONG(    ADDR(.bss_ccmsram));
-        LONG(  SIZEOF(.bss_ccmsram) / 4);
+        LONG (__bss_sram1_start__)
+        LONG (__bss_sram1_end__ - __bss_sram1_start__)
+        LONG (__bss_sram2_start__)
+        LONG (__bss_sram2_end__ - __bss_sram2_start__)
+        LONG (__bss_ccmsram_start__)
+        LONG (__bss_ccmsram_end__ - __bss_ccmsram_start__)
         __zero_table_end__ = .;
     } > FLASH
 
@@ -88,7 +88,7 @@ SECTIONS
         *(.data_sram1.*)
         . = ALIGN(4);
         __data_sram1_end__ = .;
-    } > SRAM1
+    } > SRAM1 AT > FLASH
 
     .data_sram2 :
     {
@@ -98,7 +98,7 @@ SECTIONS
         *(.data_sram2.*)
         . = ALIGN(4);
         __data_sram2_end__ = .;
-    } > SRAM2
+    } > SRAM2 AT > FLASH
 
     .data_ccmsram :
     {
@@ -108,33 +108,37 @@ SECTIONS
         *(.data_ccmsram.*)
         . = ALIGN(4);
         __data_ccmsram_end__ = .;
-    } > CCMSRAM
+    } > CCMSRAM AT > FLASH
 
     .bss_sram1 :
     {
         . = ALIGN(4);
-        __bss_start__ = .;
+        __bss_sram1_start__ = .;
         *(.bss)
         *(.bss.*)
         *(COMMON)
         . = ALIGN(4);
-        __bss_end__ = .;
+        __bss_sram1_end__ = .;
     } > SRAM1 
 
     .bss_sram2 :
     {
         . = ALIGN(4);
+        __bss_sram2_start__ = .;
         *(.bss_sram2)
         *(.bss_sram2.*)
         . = ALIGN(4);
+        __bss_sram2_end__ = .;
     } > SRAM2 
 
     .bss_ccmsram :
     {
         . = ALIGN(4);
+        __bss_ccmsram_start__ = .;
         *(.bss_ccmsram)
         *(.bss_ccmsram.*)
         . = ALIGN(4);
+        __bss_ccmsram_end__ = .;
     } > CCMSRAM
   
     .heap (COPY):
