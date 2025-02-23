@@ -15,7 +15,7 @@ MEMORY
     EEPROM  (rw)  : ORIGIN = (ORIGIN(FLASH) + LENGTH(FLASH)), LENGTH = __flash_page_size__
     CCMSRAM (rwx) : ORIGIN = 0x10000000, LENGTH = 10K
     SRAM1   (rwx) : ORIGIN = 0x20000000, LENGTH = 16K
-    SRAM2   (rwx) : ORIGIN = 0x20014000, LENGTH = 6K
+    SRAM2   (rwx) : ORIGIN = 0x20004000, LENGTH = 6K
 }
 
 __flash_address__ = ORIGIN(FLASH);
@@ -84,8 +84,8 @@ SECTIONS
         . = ALIGN(4);
         __data_sram1_start__ = .;
         *(vtable)
-        *(.data_sram1)
-        *(.data_sram1.*)
+        *(.data)
+        *(.data.*)
         . = ALIGN(4);
         __data_sram1_end__ = .;
     } > SRAM1 AT > FLASH
@@ -148,7 +148,7 @@ SECTIONS
         end = __end__;
         KEEP(*(.heap*))
         __HeapLimit = .;
-    } > SRAM1
+    } > SRAM2
 
     /* .stack_dummy section doesn't contains any symbols. It is only
      * used for linker to calculate size of stack sections, and assign
@@ -156,11 +156,11 @@ SECTIONS
     .stack_dummy (COPY):
     {
         KEEP(*(.stack*))
-    } > SRAM1
+    } > SRAM2
 
     /* Set stack top to end of RAM, and stack limit move down by
      * size of stack_dummy section */
-    __StackTop = ORIGIN(SRAM1) + LENGTH(SRAM1);
+    __StackTop = ORIGIN(SRAM2) + LENGTH(SRAM2);
     __StackLimit = __StackTop - SIZEOF(.stack_dummy);
     PROVIDE(__stack = __StackTop);
 
