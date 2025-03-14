@@ -52,7 +52,7 @@ SECTIONS
     {
         . = ALIGN(4);
         __copy_table_start__ = .;
-        LONG(LOADADDR(.data_sram1));
+        LONG(LOADADDR(.data));
         LONG(__data_sram1_start__);
         LONG(__data_sram1_end__ - __data_sram1_start__);
         LONG(LOADADDR(.data_sram2));
@@ -77,9 +77,9 @@ SECTIONS
         __zero_table_end__ = .;
     } > FLASH
 
-    __etext = .;
+    __etext = ALIGN(4);
 
-    .data_sram1 :
+    .data : AT(__etext)
     {
         . = ALIGN(4);
         __data_sram1_start__ = .;
@@ -88,9 +88,11 @@ SECTIONS
         *(.data.*)
         . = ALIGN(4);
         __data_sram1_end__ = .;
-    } > SRAM1 AT > FLASH
+    } > SRAM1
 
-    .data_sram2 :
+    __etext2 = ALIGN(4);
+
+    .data_sram2 : AT(__etext2)
     {
         . = ALIGN(4);
         __data_sram2_start__ = .;
@@ -98,9 +100,11 @@ SECTIONS
         *(.data_sram2.*)
         . = ALIGN(4);
         __data_sram2_end__ = .;
-    } > SRAM2 AT > FLASH
+    } > SRAM2
 
-    .data_ccmsram :
+    __etext3 = ALIGN(4);
+
+    .data_ccmsram : AT(__etext3)
     {
         . = ALIGN(4);
         __data_ccmsram_start__ = .;
@@ -108,7 +112,7 @@ SECTIONS
         *(.data_ccmsram.*)
         . = ALIGN(4);
         __data_ccmsram_end__ = .;
-    } > CCMSRAM AT > FLASH
+    } > CCMSRAM
 
     .bss_sram1 :
     {
