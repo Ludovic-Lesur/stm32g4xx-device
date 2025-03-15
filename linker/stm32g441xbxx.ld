@@ -90,7 +90,7 @@ SECTIONS
         __data_sram1_end__ = .;
     } > SRAM1
 
-    __etext2 = ALIGN(4);
+    __etext2 = (__etext + __data_sram1_end__ - __data_sram1_start__);
 
     .data_sram2 : AT(__etext2)
     {
@@ -102,7 +102,7 @@ SECTIONS
         __data_sram2_end__ = .;
     } > SRAM2
 
-    __etext3 = ALIGN(4);
+    __etext3 = (__etext2 + __data_sram2_end__ - __data_sram2_start__);
 
     .data_ccmsram : AT(__etext3)
     {
@@ -123,7 +123,7 @@ SECTIONS
         *(COMMON)
         . = ALIGN(4);
         __bss_sram1_end__ = .;
-    } > SRAM1 
+    } > SRAM1
 
     .bss_sram2 :
     {
@@ -133,7 +133,7 @@ SECTIONS
         *(.bss_sram2.*)
         . = ALIGN(4);
         __bss_sram2_end__ = .;
-    } > SRAM2 
+    } > SRAM2
 
     .bss_ccmsram :
     {
