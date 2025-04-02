@@ -114,7 +114,7 @@ SECTIONS
         __data_ccmsram_end__ = .;
     } > CCMSRAM
 
-    .bss_sram1 :
+    .bss :
     {
         . = ALIGN(4);
         __bss_sram1_start__ = .;
