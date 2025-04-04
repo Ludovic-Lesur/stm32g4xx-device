@@ -141,7 +141,7 @@ extern uint32_t __copy_table_start__;
 extern uint32_t __copy_table_end__;
 extern uint32_t __zero_table_start__;
 extern uint32_t __zero_table_end__;
-extern uint32_t __StackTop;
+extern uint32_t __stack_top__;
 
 /*** STM32G4X DEVICE local global variables ***/
 
@@ -151,7 +151,7 @@ static uint8_t heap[STM32G4XX_DEVICE_HEAP_SIZE] __attribute__ ((aligned(8), used
 #endif
 const pFunc __Vectors[] __attribute__ ((section(".vectors"))) = {
     // Cortex-M4 interrupts.
-    (pFunc) ((uint32_t) &__StackTop),
+    (pFunc) ((uint32_t) &__stack_top__),
     Reset_Handler,
     NMI_Handler,
     HardFault_Handler,

@@ -76,9 +76,9 @@ SECTIONS
         __zero_table_end__ = .;
     } > FLASH
 
-    __etext = ALIGN(4);
+    __flash_end__ = ALIGN(4);
 
-    .data : AT(__etext)
+    .data : AT(__flash_end__)
     {
         . = ALIGN(4);
         __data_sram1_start__ = .;
@@ -89,9 +89,9 @@ SECTIONS
         __data_sram1_end__ = .;
     } > SRAM1
 
-    __etext2 = (__etext + __data_sram1_end__ - __data_sram1_start__);
+    __flash_end_2__ = (__flash_end__ + __data_sram1_end__ - __data_sram1_start__);
 
-    .data_sram2 : AT(__etext2)
+    .data_sram2 : AT(__flash_end_2__)
     {
         . = ALIGN(4);
         __data_sram2_start__ = .;
@@ -101,9 +101,9 @@ SECTIONS
         __data_sram2_end__ = .;
     } > SRAM2
 
-    __etext3 = (__etext2 + __data_sram2_end__ - __data_sram2_start__);
+    __flash_end_3__ = (__flash_end_2__ + __data_sram2_end__ - __data_sram2_start__);
 
-    .data_ccmsram : AT(__etext3)
+    .data_ccmsram : AT(__flash_end_3__)
     {
         . = ALIGN(4);
         __data_ccmsram_start__ = .;
@@ -144,29 +144,20 @@ SECTIONS
         __bss_ccmsram_end__ = .;
     } > CCMSRAM
   
-    .heap (COPY):
+    .heap (COPY) :
     {
-        __HeapBase = .;
-        __end__ = .;
-        end = __end__;
+        __heap_start__ = .;
         KEEP(*(.heap*))
-        __HeapLimit = .;
+        __heap_end__ = .;
     } > SRAM2
 
-    /* .stack_dummy section doesn't contains any symbols. It is only
-     * used for linker to calculate size of stack sections, and assign
-     * values to stack symbols later */
-    .stack_dummy (COPY):
+    .stack (COPY) :
     {
         KEEP(*(.stack*))
     } > SRAM2
 
-    /* Set stack top to end of RAM, and stack limit move down by
-     * size of stack_dummy section */
-    __StackTop = ORIGIN(SRAM2) + LENGTH(SRAM2);
-    __StackLimit = __StackTop - SIZEOF(.stack_dummy);
-    PROVIDE(__stack = __StackTop);
+    __stack_top__ = ORIGIN(SRAM2) + LENGTH(SRAM2);
+    __stack_limit__ = __stack_top__ - SIZEOF(.stack);
 
-    /* Check if data + heap + stack exceeds RAM limit */
-    ASSERT(__StackLimit >= __HeapLimit, "region RAM overflowed with stack")
+    ASSERT((__stack_limit__ >= __heap_end__), "Region SRAM2 overflowed with stack")
 }
