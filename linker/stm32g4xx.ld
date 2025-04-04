@@ -113,7 +113,7 @@ SECTIONS
         __data_ccmsram_end__ = .;
     } > CCMSRAM
 
-    .bss :
+    .bss (NOLOAD) :
     {
         . = ALIGN(4);
         __bss_sram1_start__ = .;
@@ -124,7 +124,7 @@ SECTIONS
         __bss_sram1_end__ = .;
     } > SRAM1
 
-    .bss_sram2 :
+    .bss_sram2 (NOLOAD) :
     {
         . = ALIGN(4);
         __bss_sram2_start__ = .;
@@ -134,7 +134,7 @@ SECTIONS
         __bss_sram2_end__ = .;
     } > SRAM2
 
-    .bss_ccmsram :
+    .bss_ccmsram (NOLOAD) :
     {
         . = ALIGN(4);
         __bss_ccmsram_start__ = .;
