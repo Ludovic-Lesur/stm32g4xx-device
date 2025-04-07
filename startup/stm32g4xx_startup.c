@@ -2,7 +2,7 @@
  * stm32g4xx_startup.c
  *
  *  Created on: 02 feb. 2025
- *      Author: ARM
+ *      Author: Ludo
  */
 
 #ifndef STM32G4XX_DEVICE_DISABLE_FLAGS_FILE
@@ -143,12 +143,14 @@ extern uint32_t __zero_table_start__;
 extern uint32_t __zero_table_end__;
 extern uint32_t __stack_top__;
 
-/*** STM32G4X DEVICE local global variables ***/
+/*** STM32G4XX DEVICE local global variables ***/
 
 static uint8_t stack[STM32G4XX_DEVICE_STACK_SIZE] __attribute__ ((aligned(8), used, section(".stack")));
+
 #if (STM32G4XX_DEVICE_HEAP_SIZE > 0)
 static uint8_t heap[STM32G4XX_DEVICE_HEAP_SIZE] __attribute__ ((aligned(8), used, section(".heap")));
 #endif
+
 const pFunc __Vectors[] __attribute__ ((section(".vectors"))) = {
     // Cortex-M4 interrupts.
     (pFunc) ((uint32_t) &__stack_top__),

@@ -2,7 +2,7 @@
  * stm32g441xbxx.ld
  *
  *  Created on: 04 apr. 2025
- *      Author: ARM
+ *      Author: Ludo
  */
 
 __flash_page_size__ = 2K;
@@ -27,8 +27,6 @@ SECTIONS
     .text :
     {
         KEEP(*(.vectors))
-        KEEP(*(.ResetHandler))
-        KEEP(*(.DefaultHandler))
         *(.text*)
         *(.rodata*)
         . = ALIGN(4);

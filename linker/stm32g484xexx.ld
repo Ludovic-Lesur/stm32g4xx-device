@@ -2,7 +2,7 @@
  * stm32g484xexx.ld
  *
  *  Created on: 02 feb. 2025
- *      Author: ARM
+ *      Author: Ludo
  */
 
 __flash_size__ = 512K;
