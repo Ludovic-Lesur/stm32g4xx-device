@@ -1,5 +1,5 @@
 /*
- * stm32g441xbxx.ld
+ * stm32g4xx.ld
  *
  *  Created on: 04 apr. 2025
  *      Author: Ludo
