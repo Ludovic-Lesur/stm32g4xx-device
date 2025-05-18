@@ -8,6 +8,9 @@
 #ifndef STM32G4XX_DEVICE_DISABLE_FLAGS_FILE
 #include "stm32g4xx_device_flags.h"
 #endif
+
+#ifndef STM32G4XX_DEVICE_DISABLE
+
 #include "types.h"
 
 /*** STM32G4XX DEVICE structures ***/
@@ -310,3 +313,5 @@ void Default_Handler(void) {
         __asm volatile ("wfi");
     }
 }
+
+#endif /* STM32G4XX_DEVICE_DISABLE */
